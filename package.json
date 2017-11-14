@@ -1,0 +1,32 @@
+{
+  "name": "lively4-app",
+  "version": "1.0.0",
+  "description": "Run lively locally",
+  "main": "index.js",
+  "repository": "https://github.com/LivelyKernel/lively4-app.git",
+  "author": "Benjamin Feldmann <benjamin-feldmann@web.de>",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "build",
+    "pack": "build --dir"
+  },
+  "build": {
+    "appId": "lively4.app",
+    "win": {
+      "icon": "icon"
+    },
+    "files": [
+      "**/*",
+      "!dev.js",
+      "!yarn.lock",
+      "static/*"
+    ],
+    "directories": {
+    }
+  },
+  "devDependencies": {
+    "electron": "^1.7.9",
+    "electron-builder": "^19.45.4"
+  }
+}
