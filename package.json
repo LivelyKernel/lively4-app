@@ -10,7 +10,9 @@
     "start": "electron .",
     "dist": "build",
     "pack": "build --dir",
-    "submodules":"git submodule init && git submodule update --recursive"
+    "setup": "yarn run init-submodules && yarn run install-submodules",
+    "init-submodules":"git submodule init && cd lively4-server && git submodule init && cd ../ && git submodule update --recursive",
+    "install-submodules": "yarn && cd lively4-core && yarn && cd ../lively4-server && yarn"
   },
   "build": {
     "appId": "lively4.app",
