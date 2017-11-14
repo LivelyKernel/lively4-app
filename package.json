@@ -12,7 +12,8 @@
     "pack": "build --dir",
     "setup": "yarn run init-submodules && yarn run install-submodules",
     "init-submodules":"git submodule init && cd lively4-server && git submodule init && cd ../ && git submodule update --recursive",
-    "install-submodules": "yarn && cd lively4-core && yarn && cd ../lively4-server && yarn"
+    "install-submodules": "yarn && cd lively4-core && yarn && cd ../lively4-server && yarn",
+    "test-server": "node lively4-server/dist/httpServer.js --server=\"lively4-server\" --port=\"8080\" --index-files=\"true\" --directory=\"lively4-core\" --auto-commit=\"true\""
   },
   "build": {
     "appId": "lively4.app",

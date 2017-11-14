@@ -15,11 +15,13 @@ run `yarn run setup`
 - installs all dependencies
 - handle the gulp and babel stuff (in lively4-server)
 
-### Start
+### Scripts
 
-- `yarn start` - start an electron instance with the lively4-core embedded
-- `yarn run dist` - builds a package with additional installer
-- `yarn run pack` - builds the app for production
+- `yarn test-server` - starts an lively4-server with an lively4-core embedded
+-- currently not really working --
+- `yarn start` - start an electron instance with the lively4-core embedded  
+- `yarn run dist` - builds a package with additional installer  
+- `yarn run pack` - builds the app for production  
 
 ### Dependencies
 
