@@ -16,12 +16,10 @@
     "win": {
       "icon": "icon"
     },
-    "files": [
-      "**/*",
-      "!dev.js",
-      "!yarn.lock",
-      "static/*"
-    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "icon": "icon"
+    },
     "directories": {
     }
   },
