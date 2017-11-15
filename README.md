@@ -17,8 +17,7 @@ run `yarn run setup`
 
 ### Scripts
 
-- `yarn test-server` - starts an lively4-server with an lively4-core embedded
--- currently not really working --
+- `yarn test-server` - starts an lively4-server with an lively4-core embedded on http://localhost:8080/lively4-core/start.html  
 - `yarn start` - start an electron instance with the lively4-core embedded  
 - `yarn run dist` - builds a package with additional installer  
 - `yarn run pack` - builds the app for production  
