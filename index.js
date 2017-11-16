@@ -12,11 +12,13 @@ function createWindow() {
   win.maximize();
 
   // and load the index.html of the app.
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, './lively4-core/start.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  // win.loadURL(url.format({
+  //   pathname: path.join(__dirname, './lively4-core/start.html'),
+  //   protocol: 'file:',
+  //   slashes: true
+  // }));
+  win.loadURL('http://localhost:8080/lively4-core/start.html');
+
 
   // Open the DevTools.
   win.webContents.openDevTools();
