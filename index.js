@@ -8,7 +8,11 @@ let win;
 
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow();
+  win = new BrowserWindow({  
+    webPreferences: {
+      nodeIntegration: false
+    }
+  });
   win.maximize();
 
   // and load the index.html of the app.
