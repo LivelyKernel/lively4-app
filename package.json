@@ -18,7 +18,7 @@
   "build": {
     "appId": "lively4.app",
     "win": {
-      "icon": "icon"
+      "icon": "build/icon"
     },
     "mac": {
       "category": "public.app-category.business",
