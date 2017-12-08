@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog} = require('electron');
 const path = require('path');
 const url = require('url');
 const spawn = require('child_process').spawn;
@@ -18,7 +18,7 @@ function startElectron() {
  *
  * the server (and window) gets automatically killed if the webWindow is closed
  * */
-function startServer() {
+ function startServer() {
     serverProcess = spawn('node', ['lively4-server/dist/httpServer.js',
         '--server=lively4-server/',
         '--port=8080',
@@ -39,15 +39,30 @@ function createWebWindow() {
     webWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: false
-        }
+        },
+        width: 1400,
+        height: 800
     });
-    // webWindow.maximize();
 
     webWindow.loadURL('http://localhost:8080/lively4-core/start.html');
 
 
     // Open the DevTools.
     webWindow.webContents.openDevTools();
+
+    webWindow.on('close', (e) => {
+        var choice = dialog.showMessageBox(
+            {
+                type: 'question',
+                buttons: ['Yes', 'No'],
+                title: 'Confirm',
+                message: 'Are you sure you want to quit?'
+            }
+        );
+        if(choice == 1){
+            e.preventDefault();
+        }
+    });
 
     // Emitted when the window is closed.
     webWindow.on('closed', () => {
