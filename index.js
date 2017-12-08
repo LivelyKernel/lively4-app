@@ -6,14 +6,11 @@ const spawn = require('child_process').spawn;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let webWindow;
-let serverWindow;
-let serverAlive = false;
+let serverProcess;
 
 function startElectron() {
-    createServerWindow();
-    setTimeout(function () {
-        createWebWindow();
-    }, 1000);
+    startServer();
+    createWebWindow();
 }
 
 /**
@@ -21,42 +18,20 @@ function startElectron() {
  *
  * the server (and window) gets automatically killed if the webWindow is closed
  * */
-function createServerWindow() {
-    serverWindow = new BrowserWindow({
-        show: false
+function startServer() {
+    serverProcess = spawn('node', ['lively4-server/dist/httpServer.js',
+        '--server=lively4-server/',
+        '--port=8080',
+        '--index-files=true',
+        '--directory=lively4/',
+        '--auto-commit=true']);
+
+    serverProcess.on('data', function (data) {
+        console.log(data.toString());
     });
 
-    serverWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './server.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-
-    let t;
-    serverWindow.webContents.openDevTools();
-    serverWindow.webContents.once("did-finish-load", function () {
-        serverAlive = true;
-
-        console.log('foo');
-        t = spawn('node', ['lively4-server/dist/httpServer.js',
-            '--server=lively4-server/',
-            '--port=8080',
-            '--index-files=true',
-            '--directory=lively4/',
-            '--auto-commit=true']);
-
-        t.on('data', function (data) {
-            console.log(data.toString());
-        });
-
-        t.stdout.pipe(process.stdout);
-        t.stderr.pipe(process.stderr);
-    });
-
-    serverWindow.on('closed', () => {
-        // kill process t
-        t.kill();
-    });
+    serverProcess.stdout.pipe(process.stdout);
+    serverProcess.stderr.pipe(process.stderr);
 }
 
 function createWebWindow() {
@@ -76,13 +51,10 @@ function createWebWindow() {
 
     // Emitted when the window is closed.
     webWindow.on('closed', () => {
-        // close server if alive
-        setTimeout(function () {
-            if (serverWindow !== null && serverAlive) {
-                serverWindow.close();
-                serverWindow = null;
-            }
-        }, 1000);
+        if (!serverProcess.killed) {
+            console.log("stopping server.");
+            serverProcess.kill();
+        }
         webWindow = null;
     });
 }
@@ -92,16 +64,11 @@ app.on('ready', startElectron);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    console.log('closing..');
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit();
     }
-});
-
-app.on('before-quit', () => {
-    app.exit();
 });
 
 app.on('activate', () => {
