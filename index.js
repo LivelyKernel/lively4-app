@@ -16,11 +16,12 @@ function startElectron() {
  * the server (and window) gets automatically killed if the webWindow is closed
  * */
 function startServer() {
-
   process.argv.push(
       '--server=lively4-server/',
       '--port=8080',
       '--index-files=true',
+      // for building with electron
+      // '--directory=resources/app/lively4/',
       '--directory=lively4/',
       '--auto-commit=true');
 

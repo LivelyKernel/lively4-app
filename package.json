@@ -25,7 +25,8 @@
       "icon": "icon"
     },
     "directories": {
-    }
+    },
+    "asar": false
   },
   "devDependencies": {
     "electron": "^1.7.9",
