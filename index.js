@@ -21,8 +21,8 @@ function startServer() {
       '--port=8080',
       '--index-files=true',
       // for building with electron
-      // '--directory=resources/app/lively4/',
-      '--directory=lively4/',
+      '--directory=resources/app/lively4/',
+      // '--directory=lively4/',
       '--auto-commit=true');
 
   server = require('./lively4-server/dist/httpServer');
