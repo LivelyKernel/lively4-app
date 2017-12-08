@@ -1,3 +1,5 @@
+require('hazardous');
+const path = require('path');
 const { app, BrowserWindow, dialog } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -16,12 +18,15 @@ function startElectron() {
  * the server (and window) gets automatically killed if the webWindow is closed
  * */
 function startServer() {
+  // https://github.com/epsitec-sa/hazardous
+  const serverDir = path.join(__dirname, 'lively4-server/');
+  const livelyDir = path.join(__dirname, 'lively4/');
 
   process.argv.push(
-      '--server=lively4-server/',
+      '--server=' + serverDir,
       '--port=8080',
       '--index-files=true',
-      '--directory=lively4/',
+      '--directory=' + livelyDir,
       '--auto-commit=true');
 
   server = require('./lively4-server/dist/httpServer');
