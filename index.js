@@ -19,15 +19,19 @@ function startElectron() {
  * */
 function startServer() {
   // https://github.com/epsitec-sa/hazardous
-  const serverDir = path.join(__dirname, 'lively4-server/');
-  const livelyDir = path.join(__dirname, 'lively4/');
+  let serverDir = path.join(__dirname, 'lively4-server');
+  let livelyDir = path.join(__dirname, 'lively4/');
+
+  // needed for windows path - replace 'C:\' with '/'
+  if(serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
+  if(livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
 
   process.argv.push(
-      '--server=' + serverDir,
-      '--port=8080',
-      '--index-files=true',
-      '--directory=' + livelyDir,
-      '--auto-commit=true');
+    '--server=' + serverDir,
+    '--port=8080',
+    '--index-files=true',
+    '--directory=' + livelyDir,
+    '--auto-commit=true');
 
   server = require('./lively4-server/dist/httpServer');
   server.start();
