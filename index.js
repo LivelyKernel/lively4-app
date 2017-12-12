@@ -6,8 +6,10 @@ const { app, BrowserWindow, dialog } = require('electron');
 // be closed automatically when the JavaScript object is garbage collected.
 let webWindow;
 let server;
+let port;
 
 function startElectron() {
+  port = 8000;
   setTimeout(startServer, 0);
   setTimeout(createWebWindow, 1000);
 }
@@ -27,11 +29,11 @@ function startServer() {
   if(livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
 
   process.argv.push(
-    '--server=' + serverDir,
-    '--port=8080',
-    '--index-files=true',
-    '--directory=' + livelyDir,
-    '--auto-commit=true');
+    `--server=${serverDir}`,
+    `--port=${port}`,
+    `--index-files={true}`,
+    `--directory=${livelyDir}`,
+    `--auto-commit=${true}`);
 
   server = require('./lively4-server/dist/httpServer');
   server.start();
@@ -47,7 +49,7 @@ function createWebWindow() {
     height: 800
   });
 
-  webWindow.loadURL('http://localhost:8080/lively4-core/start.html');
+  webWindow.loadURL(`http://localhost:${port}/lively4-core/start.html`);
 
 
   // Open the DevTools.
