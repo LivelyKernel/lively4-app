@@ -1,4 +1,5 @@
 require('hazardous');
+const portfinder = require('portfinder');
 const path = require('path');
 const { app, BrowserWindow, dialog } = require('electron');
 
@@ -6,19 +7,13 @@ const { app, BrowserWindow, dialog } = require('electron');
 // be closed automatically when the JavaScript object is garbage collected.
 let webWindow;
 let server;
-let port;
+let serverPort;
 
 function startElectron() {
-  port = 8000;
   setTimeout(startServer, 0);
   setTimeout(createWebWindow, 1000);
 }
 
-/**
- * create a hidden BrowserWindow that spawns a new node process (and start the server)
- *
- * the server (and window) gets automatically killed if the webWindow is closed
- * */
 function startServer() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
@@ -28,15 +23,19 @@ function startServer() {
   if(serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
   if(livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
 
-  process.argv.push(
-    `--server=${serverDir}`,
-    `--port=${port}`,
-    `--index-files={true}`,
-    `--directory=${livelyDir}`,
-    `--auto-commit=${true}`);
+  portfinder.getPort(function (err, port) {
+    serverPort = port;
 
-  server = require('./lively4-server/dist/httpServer');
-  server.start();
+    process.argv.push(
+      `--server=${serverDir}`,
+      `--port=${port}`,
+      `--index-files={true}`,
+      `--directory=${livelyDir}`,
+      `--auto-commit=${true}`);
+
+    server = require('./lively4-server/dist/httpServer');
+    server.start();
+  });
 }
 
 function createWebWindow() {
@@ -49,7 +48,7 @@ function createWebWindow() {
     height: 800
   });
 
-  webWindow.loadURL(`http://localhost:${port}/lively4-core/start.html`);
+  webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
 
 
   // Open the DevTools.
