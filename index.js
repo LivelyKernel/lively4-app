@@ -9,7 +9,13 @@ let webWindow;
 let server;
 let serverPort;
 
+function addGitPath() {
+  // TODO add windows and linux
+  process.env.PATH = path.join(__dirname, 'bin/mac') + ':' + process.env.PATH;
+}
+
 function startElectron() {
+  addGitPath();
   setTimeout(startServer, 0);
   setTimeout(createWebWindow, 1000);
 }
