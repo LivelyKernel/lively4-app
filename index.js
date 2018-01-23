@@ -1,8 +1,6 @@
 require('hazardous');
 const portfinder = require('portfinder');
 const path = require('path');
-const spawn = require('child_process').spawn;
-const exec = require('child_process').exec;
 const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
 
