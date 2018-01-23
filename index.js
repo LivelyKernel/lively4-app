@@ -1,6 +1,9 @@
 require('hazardous');
 const portfinder = require('portfinder');
 const path = require('path');
+const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
+const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -9,9 +12,28 @@ let webWindow;
 let server;
 let serverPort;
 
+function getPlatform() {
+  switch (process.platform) {
+    case 'aix':
+    case 'freebsd':
+    case 'linux':
+    case 'openbsd':
+    case 'android':
+      return 'linux';
+    case 'darwin':
+    case 'sunos':
+      return 'mac';
+    case 'win32':
+      return 'win';
+  }
+}
+
 function addGitPath() {
-  // TODO add windows and linux
-  process.env.PATH = path.join(__dirname, 'bin/mac') + ':' + process.env.PATH;
+  if (getPlatform() === 'mac') {
+    process.env.PATH = path.join(__dirname, 'bin/mac') + ':' + process.env.PATH;
+  } else if (getPlatform() === 'win') {
+    process.env.PATH = path.join(appRootDir.get(), 'bin/win32/bin') + ';' + process.env.PATH;
+  }
 }
 
 function startElectron() {
@@ -26,8 +48,8 @@ function startServer() {
   let livelyDir = path.join(__dirname, 'lively4/');
 
   // needed for windows path - replace 'C:\' with '/'
-  if(serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
-  if(livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
+  if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
+  if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
 
   portfinder.getPort(function (err, port) {
     serverPort = port;
