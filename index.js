@@ -19,7 +19,7 @@ function getPlatform() {
     case 'linux':
     case 'openbsd':
     case 'android':
-      return 'unix';
+      return 'linux';
     case 'darwin':
     case 'sunos':
       return 'mac';
@@ -33,9 +33,8 @@ function addGitPath() {
     process.env.PATH = path.join(__dirname, 'bin/mac') + ':' + process.env.PATH;
   } else if (getPlatform() === 'win') {
     process.env.PATH = path.join(appRootDir.get(), 'bin/win32/bin') + ';' + process.env.PATH;
-  } else if (getPlatform() === 'unix') {
-    // sth like that
-    process.env.PATH = path.join(__dirname, 'bin/unix') + ':' + process.env.PATH;
+  } else if (getPlatform() === 'linux') {
+    process.env.PATH = path.join(__dirname, 'bin/linux') + ':' + process.env.PATH;
   }
 }
 
