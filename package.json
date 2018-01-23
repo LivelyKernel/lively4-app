@@ -10,10 +10,9 @@
     "start": "electron .",
     "dist": "build",
     "pack": "build --dir",
-    "setup": "yarn run init-submodules && yarn run install-submodules",
+    "setup": "npm run init-submodules && npm run install-submodules",
     "init-submodules": "git submodule init && cd lively4-server && git submodule init && cd ../ && git submodule update --recursive",
-    "install-submodules": "yarn && cd lively4-server && yarn && cd ../lively4/lively4-core && yarn",
-    "test-server": "node lively4-server/dist/httpServer.js --server=\"lively4-server/\" --port=\"8080\" --index-files=\"true\" --directory=\"lively4/\" --auto-commit=\"true\""
+    "install-submodules": "npm i && cd lively4-server && npm i && cd ../lively4/lively4-core && npm i"
   },
   "build": {
     "appId": "lively4.app",
@@ -25,12 +24,17 @@
       "icon": "icon"
     },
     "directories": {},
-    "asarUnpack": "**/lively4/**"
+    "asarUnpack": [
+      "**/lively4/**",
+      "**/bin/**"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^1.7.11",
+    "electron-builder": "^19.45.4"
   },
   "dependencies": {
     "app-root-dir": "^1.0.2",
-    "electron": "^1.7.9",
-    "electron-builder": "^19.45.4",
     "hazardous": "^0.3.0",
     "portfinder": "^1.0.13"
   }
