@@ -9,6 +9,7 @@ const { app, BrowserWindow, dialog } = require('electron');
 let webWindow;
 let server;
 let serverPort;
+let hostCompleteFileSystem = false;
 
 function getPlatform() {
   switch (process.platform) {
@@ -42,28 +43,54 @@ function startElectron() {
   setTimeout(createWebWindow, 1000);
 }
 
-function startServer() {
+function getWindowDir() {
+  if (hostCompleteFileSystem) {
+    let livelyDir = path.join(__dirname, 'lively4/');
+    // needed for windows path - replace 'C:\' with ''
+    if (livelyDir.indexOf(':') !== -1) livelyDir = `${livelyDir.substring(3)}`;
+    return livelyDir;
+  }
+
+  return '';
+}
+
+function getLivelyDir() {
+  if (hostCompleteFileSystem) {
+    return '/';
+  }
+
+  // https://github.com/epsitec-sa/hazardous
+  let livelyDir = path.join(__dirname, 'lively4/');
+  // needed for windows path - replace 'C:\' with '/'
+  if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
+  return livelyDir;
+}
+
+function getServerDir() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
-  let livelyDir = path.join(__dirname, 'lively4/');
-
-  // needed for windows path - replace 'C:\' with '/'
   if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
-  if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
+  return serverDir;
+}
 
-  portfinder.getPort(function (err, port) {
-    serverPort = port;
+function startServer() {
+  portfinder.getPortPromise()
+    .then((port) => {
+      serverPort = port;
 
-    process.argv.push(
-      `--server=${serverDir}`,
-      `--port=${port}`,
-      `--index-files={true}`,
-      `--directory=${livelyDir}`,
-      `--auto-commit=${true}`);
+      process.argv.push(
+        `--server=${getServerDir()}`,
+        `--port=${port}`,
+        `--index-files={true}`,
+        `--directory=${getLivelyDir()}`,
+        `--auto-commit=${true}`);
 
-    server = require('./lively4-server/dist/httpServer');
-    server.start();
-  });
+      server = require('./lively4-server/dist/httpServer');
+      server.start();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function createWebWindow() {
@@ -76,7 +103,8 @@ function createWebWindow() {
     height: 800
   });
 
-  webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
+  // webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
+  webWindow.loadURL(`http://localhost:${serverPort}/${getWindowDir()}lively4-core/start.html`);
 
 
   // Open the DevTools.
