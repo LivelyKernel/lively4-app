@@ -1,5 +1,5 @@
 require('hazardous');
-const portfinder = require('portfinder');
+const getPort = require('get-port');
 const path = require('path');
 const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
@@ -74,23 +74,19 @@ function getServerDir() {
 }
 
 function startServer() {
-  portfinder.getPortPromise()
-    .then((port) => {
-      serverPort = port;
+  getPort({ port: 8000 }).then(port => {
+    serverPort = port;
 
-      process.argv.push(
-        `--server=${getServerDir()}`,
-        `--port=${port}`,
-        `--index-files={true}`,
-        `--directory=${getLivelyDir()}`,
-        `--auto-commit=${true}`);
+    process.argv.push(
+      `--server=${getServerDir()}`,
+      `--port=${port}`,
+      `--index-files={true}`,
+      `--directory=${getLivelyDir()}`,
+      `--auto-commit=${true}`);
 
-      server = require('./lively4-server/dist/httpServer');
-      server.start();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    server = require('./lively4-server/dist/httpServer');
+    server.start();
+  });
 }
 
 function createWebWindow() {
