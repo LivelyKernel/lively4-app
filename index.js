@@ -47,10 +47,11 @@ function getWindowDir() {
   if (hostCompleteFileSystem) {
     let livelyDir = path.join(__dirname, 'lively4/');
     // needed for windows path - replace 'C:\' with ''
-    if (livelyDir.indexOf(':') !== -1) livelyDir = `${livelyDir.substring(3)}`;
-    return livelyDir;
+    if (livelyDir.indexOf(':') !== -1) {
+      livelyDir = livelyDir.substring(3);
+    }
+    return livelyDir.substring(1);
   }
-
   return '';
 }
 
@@ -102,18 +103,17 @@ function createWebWindow() {
   // webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
   webWindow.loadURL(`http://localhost:${serverPort}/${getWindowDir()}lively4-core/start.html`);
 
-
   // Open the DevTools.
   webWindow.webContents.openDevTools();
 
   webWindow.on('close', (e) => {
     var choice = dialog.showMessageBox(
-      {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        title: 'Confirm',
-        message: 'Are you sure you want to quit?'
-      }
+    {
+      type: 'question',
+      buttons: ['Yes', 'No'],
+      title: 'Confirm',
+      message: 'Are you sure you want to quit?'
+    }
     );
     if (choice == 1) {
       e.preventDefault();
