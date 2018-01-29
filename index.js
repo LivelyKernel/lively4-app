@@ -38,10 +38,10 @@ function addGitPath() {
 }
 
 function startElectron() {
-  addGitPath();
+  // addGitPath();
   setTimeout(startServer, 0);
-  var terminalServer = require('./server.js');
-  terminalServer.terminalServer(5000);
+  // var terminalServer = require('./server.js');
+  // terminalServer.terminalServer(5000);
   setTimeout(createWebWindow, 1000);
 }
 
@@ -62,8 +62,8 @@ function getLivelyDir() {
     return '/';
   }
 
-  // https://github.com/epsitec-sa/hazardous
-  let livelyDir = path.join(__dirname, 'lively4/');
+  let currDir = __dirname;
+  let livelyDir = currDir.slice(0, -8) + 'lively4/';
   // needed for windows path - replace 'C:\' with '/'
   if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
   return livelyDir;
