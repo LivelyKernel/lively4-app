@@ -12,8 +12,15 @@ function makeId() {
   return text;
 }
 
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.get("/kill/*", function(req, res) {
   let id = req.params[0];
+  console.log(runningProcesses);
   runningProcesses[id]["process"].kill();
   res.send("killed");
 });
@@ -32,7 +39,7 @@ app.get("/stderr/*", function(req, res) {
 
 app.get("/end/*", function(req, res) { 
   let id = req.params[0];
-  if (runningProcesses[id]["end"]) {
+  if (runningProcesses[id]["end"] && runningProcesses[id]["stdout"].length === 0 && runningProcesses[id]["stderr"].length === 0) {
     delete runningProcesses[id];
     res.send(true);
   } else {
