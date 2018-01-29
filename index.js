@@ -40,6 +40,8 @@ function addGitPath() {
 function startElectron() {
   addGitPath();
   setTimeout(startServer, 0);
+  var terminalServer = require('./server.js');
+  terminalServer.terminalServer(5000);
   setTimeout(createWebWindow, 1000);
 }
 

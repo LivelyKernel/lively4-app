@@ -18,6 +18,10 @@ app.all('/*', function(req, res, next) {
   next();
 });
 
+app.get("/terminalserver", function(req, res) {
+  res.send("running terminalserver");
+});
+
 app.get("/kill/*", function(req, res) {
   let id = req.params[0];
   console.log(runningProcesses);
@@ -69,7 +73,15 @@ app.get("/new/*", function(req, res){
   res.send(id);
 });
 
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
- console.log("Listening on " + port);
-});
+// var port = process.env.PORT || 5000;
+// app.listen(port, function() {
+//  console.log("Listening on " + port);
+// });
+
+module.exports = {
+  terminalServer: function (port) {
+    app.listen(port, function() {
+      console.log("Listening on " + port);
+    });
+  }
+};
