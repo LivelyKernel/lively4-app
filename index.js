@@ -62,8 +62,11 @@ function getLivelyDir() {
     return '/';
   }
 
+  let livelyDir = path.join(__dirname, 'lively4/');
   let currDir = __dirname;
-  let livelyDir = currDir.slice(0, -8) + 'lively4/';
+  if (currDir.indexOf('app.asar') > -1) {
+    livelyDir = currDir.slice(0, -8) + 'lively4/';
+  }
   // needed for windows path - replace 'C:\' with '/'
   if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
   return livelyDir;
@@ -106,7 +109,7 @@ function createWebWindow() {
   webWindow.loadURL(`http://localhost:${serverPort}/${getWindowDir()}lively4-core/start.html`);
 
   // Open the DevTools.
-  webWindow.webContents.openDevTools();
+  // webWindow.webContents.openDevTools();
 
   webWindow.on('close', (e) => {
     var choice = dialog.showMessageBox(
