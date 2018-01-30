@@ -1,8 +1,9 @@
 require('hazardous');
-const getPort = require('get-port');
 const path = require('path');
 const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
+const tcpPortUsed = require('tcp-port-used');
+const terminalServer = require('./server.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -10,6 +11,7 @@ let webWindow;
 let server;
 let serverPort;
 let hostCompleteFileSystem = false;
+let runTerminalServer = true;
 
 function getPlatform() {
   switch (process.platform) {
@@ -39,7 +41,7 @@ function addGitPath() {
 
 function startElectron() {
   // addGitPath();
-  setTimeout(startServer, 0);
+  setTimeout(startServers, 0);
   // var terminalServer = require('./server.js');
   // terminalServer.terminalServer(5000);
   setTimeout(createWebWindow, 1000);
@@ -79,27 +81,54 @@ function getServerDir() {
   return serverDir;
 }
 
-function startServer() {
-  getPort({ port: 8000 }).then(port => {
-    serverPort = port;
+function startServer(port) {
+  serverPort = port;
 
-    // With the built version it can happen that there is only one argument.
-    // The lively4-server is using https://www.npmjs.com/package/argv which calls 'process.argv.slice( 2 )'.
-    // Thus, a random argument needs to be added.
-    if (process.argv.length < 2) {
-      process.argv.push(`--random=123`);
+  // With the built version it can happen that there is only one argument.
+  // The lively4-server is using https://www.npmjs.com/package/argv which calls 'process.argv.slice( 2 )'.
+  // Thus, a random argument needs to be added.
+  if (process.argv.length < 2) {
+    process.argv.push(`--random=123`);
+  }
+
+  process.argv.push(
+    `--server=${getServerDir()}`,
+    `--port=${port}`,
+    `--index-files=true`,
+    `--directory=${getLivelyDir()}`,
+    `--auto-commit=true`);
+
+  server = require('./lively4-server/dist/httpServer');
+  server.start();
+}
+
+function findPort(port) {
+  tcpPortUsed.check(port, '127.0.0.1')
+  .then( (inUse) => {
+    console.log('Port '+port+' usage: '+inUse);
+    if (inUse) {
+      findPort(port + 1);
+    } else {
+      if (runTerminalServer) {
+        tcpPortUsed.check(port + 1, '127.0.0.1')
+        .then( (inUseTerminal) => {
+          if (inUseTerminal) {
+            findPort(port + 1);
+          } else {
+            startServer(port);
+            terminalServer.terminalServer(port + 1);
+            console.log("starting " + port);
+          }
+        });
+      } else {
+        startServer(port);
+      }
     }
-
-    process.argv.push(
-      `--server=${getServerDir()}`,
-      `--port=${port}`,
-      `--index-files=true`,
-      `--directory=${getLivelyDir()}`,
-      `--auto-commit=true`);
-
-    server = require('./lively4-server/dist/httpServer');
-    server.start();
   });
+}
+
+function startServers() {
+  findPort(8000);
 }
 
 function createWebWindow() {

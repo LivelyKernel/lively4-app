@@ -48,7 +48,7 @@
   "dependencies": {
     "app-root-dir": "^1.0.2",
     "express": "^4.16.2",
-    "get-port": "^3.2.0",
-    "hazardous": "^0.3.0"
+    "hazardous": "^0.3.0",
+    "tcp-port-used": "^0.1.2"
   }
 }
