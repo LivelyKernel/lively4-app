@@ -12,7 +12,7 @@
     "pack": "build --dir",
     "setup": "npm run init-submodules && npm run install-submodules",
     "init-submodules": "git submodule init && cd lively4-server && git submodule init && cd ../ && git submodule update --recursive",
-    "install-submodules": "npm i && cd lively4-server && npm i && cd ../lively4/lively4-core && npm i"
+    "install-submodules": "npm i && cd lively4-server && npm i"
   },
   "build": {
     "appId": "lively4.app",
