@@ -8,10 +8,10 @@ Lively4 to run locally
 
 ### Setup
 
-run `npm run setup`  
+run `./setup.sh`
 - this inits all submodules
 - installs all dependencies
-- handle the gulp and babel stuff (in lively4-server)
+- clones `lively4-core` repository and installs dependencies
 
 ### Scripts
 
@@ -21,5 +21,5 @@ run `npm run setup`
 
 ### Dependencies
 
-- `npm run update-submodules` - updates submodules with the newest versions on github
 - `npm run install-submodules` - updates all dependencies from the submodules
+- `npm run update-submodules` - updates submodules with the newest versions on github
