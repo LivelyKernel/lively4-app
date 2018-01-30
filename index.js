@@ -83,12 +83,19 @@ function startServer() {
   getPort({ port: 8000 }).then(port => {
     serverPort = port;
 
+    // With the built version it can happen that there is only one argument.
+    // The lively4-server is using https://www.npmjs.com/package/argv which calls 'process.argv.slice( 2 )'.
+    // Thus, a random argument needs to be added.
+    if (process.argv.length < 2) {
+      process.argv.push(`--random=123`);
+    }
+
     process.argv.push(
       `--server=${getServerDir()}`,
       `--port=${port}`,
-      `--index-files={true}`,
+      `--index-files=true`,
       `--directory=${getLivelyDir()}`,
-      `--auto-commit=${true}`);
+      `--auto-commit=true`);
 
     server = require('./lively4-server/dist/httpServer');
     server.start();
@@ -128,6 +135,7 @@ function createWebWindow() {
   // Emitted when the window is closed.
   webWindow.on('closed', () => {
     webWindow = null;
+    app.quit();
   });
 }
 
