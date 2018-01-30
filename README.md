@@ -3,7 +3,7 @@ Lively4 to run locally
 
 ### Technologies
  
-`electron` - we package and bundle our app with electron  
+[Electron](https://electronjs.org/) - we package and bundle our app with electron  
 
 
 ### Setup
