@@ -10,7 +10,6 @@ const terminalServer = require('./server.js');
 let webWindow;
 let server;
 let serverPort;
-let hostCompleteFileSystem = false;
 let runTerminalServer = true;
 
 function getPlatform() {
@@ -42,30 +41,13 @@ function addGitPath() {
 function startElectron() {
   // addGitPath();
   setTimeout(startServers, 0);
-  // var terminalServer = require('./server.js');
-  // terminalServer.terminalServer(5000);
   setTimeout(createWebWindow, 1000);
 }
 
-function getWindowDir() {
-  if (hostCompleteFileSystem) {
-    let livelyDir = path.join(__dirname, 'lively4/');
-    // needed for windows path - replace 'C:\' with ''
-    if (livelyDir.indexOf(':') !== -1) {
-      livelyDir = livelyDir.substring(3);
-    }
-    return livelyDir.substring(1);
-  }
-  return '';
-}
-
 function getLivelyDir() {
-  if (hostCompleteFileSystem) {
-    return '/';
-  }
-
   let livelyDir = path.join(__dirname, 'lively4/');
   let currDir = __dirname;
+  // TODO refactor
   if (currDir.indexOf('app.asar') > -1) {
     livelyDir = currDir.slice(0, -8) + 'lively4/';
   }
@@ -105,7 +87,6 @@ function startServer(port) {
 function findPort(port) {
   tcpPortUsed.check(port, '127.0.0.1')
   .then( (inUse) => {
-    console.log('Port '+port+' usage: '+inUse);
     if (inUse) {
       findPort(port + 1);
     } else {
@@ -117,7 +98,6 @@ function findPort(port) {
           } else {
             startServer(port);
             terminalServer.terminalServer(port + 1);
-            console.log("starting " + port);
           }
         });
       } else {
@@ -142,7 +122,7 @@ function createWebWindow() {
   });
 
   // webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
-  webWindow.loadURL(`http://localhost:${serverPort}/${getWindowDir()}lively4-core/start.html`);
+  webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
 
   // Open the DevTools.
   // webWindow.webContents.openDevTools();
