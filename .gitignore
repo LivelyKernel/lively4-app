@@ -5,6 +5,7 @@ lively4-server/yarn.lock
 yarn.lock
 */node_modules/
 
+lively4/lively4-core
 
 ### yarn generated stuff ###
 
