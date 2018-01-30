@@ -2,6 +2,7 @@
 dist/
 lively4-core/yarn.lock
 lively4-server/yarn.lock
+yarn.lock
 */node_modules/
 
 
