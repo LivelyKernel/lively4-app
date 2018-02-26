@@ -30,7 +30,7 @@ function getPlatform() {
 
 function addGitPath() {
   if (getPlatform() === 'mac') {
-    process.env.PATH = path.join(__dirname, 'bin/mac') + ':' + process.env.PATH;
+    process.env.PATH = path.join(__dirname, 'bin/mac/libexec/git-core') + ':' + process.env.PATH;
   } else if (getPlatform() === 'win') {
     process.env.PATH = path.join(appRootDir.get(), 'bin/win32/bin') + ';' + process.env.PATH;
   } else if (getPlatform() === 'linux') {
@@ -39,7 +39,7 @@ function addGitPath() {
 }
 
 function startElectron() {
-  // addGitPath();
+  addGitPath();
   setTimeout(startServers, 0);
   setTimeout(createWebWindow, 1000);
 }
