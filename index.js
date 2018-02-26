@@ -41,7 +41,7 @@ function addGitPath() {
 function startElectron() {
   addGitPath();
   setTimeout(startServers, 0);
-  setTimeout(createWebWindow, 1000);
+  setTimeout(createWebWindow, 3000);
 }
 
 function getLivelyDir() {
