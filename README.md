@@ -8,7 +8,7 @@ Lively4 to run locally
 
 ### Setup
 
-run `./setup.sh`
+Install node.js and run `./setup.sh`
 - this inits all submodules
 - installs all dependencies
 - clones `lively4-core` repository and installs dependencies
