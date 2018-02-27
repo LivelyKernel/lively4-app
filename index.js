@@ -4,6 +4,7 @@ const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
 const tcpPortUsed = require('tcp-port-used');
 const terminalServer = require('./server.js');
+var fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -28,7 +29,18 @@ function getPlatform() {
   }
 }
 
+function writePathToFile(path, comment) {
+  fs.appendFileSync("/Applications/lively4-app.app/Contents/Resources" + "/out.txt", path + " " + comment + "\n", function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
+}
+
 function addGitPath() {
+  writePathToFile(path.join(__dirname, 'bin/mac/libexec/git-core'), "git mac")
+  writePathToFile(path.join(appRootDir.get(), 'bin/win32/bin'), "git windows")
+  writePathToFile(path.join(__dirname, 'bin/linux'), "git linux")
   if (getPlatform() === 'mac') {
     process.env.PATH = path.join(__dirname, 'bin/mac/libexec/git-core') + ':' + process.env.PATH;
   } else if (getPlatform() === 'win') {
@@ -46,13 +58,20 @@ function startElectron() {
 
 function getLivelyDir() {
   let livelyDir = path.join(__dirname, 'lively4/');
+  writePathToFile(livelyDir, "livelyDir")
+
   let currDir = __dirname;
+  writePathToFile(currDir, "currDir")
+
   // TODO refactor
   if (currDir.indexOf('app.asar') > -1) {
     livelyDir = currDir.slice(0, -8) + 'lively4/';
   }
   // needed for windows path - replace 'C:\' with '/'
   if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
+
+  writePathToFile(livelyDir, "livelyDir2")
+
   return livelyDir;
 }
 
@@ -60,6 +79,8 @@ function getServerDir() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
   if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
+  writePathToFile(serverDir, "serverDir")
+
   return serverDir;
 }
 
