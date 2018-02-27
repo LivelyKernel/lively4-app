@@ -24,20 +24,10 @@
       "category": "public.app-category.business",
       "icon": "icon"
     },
-    "directories": {},
-    "files": [
-      "**/.git",
-      "**/.git/**",
-      "**/*",
-      "!**/.gitmodules"
-    ],
     "extraResources": [
       "lively4",
       "lively4/**/.*",
-      "lively4/**/.*/**"
-    ],
-    "asarUnpack": [
-      "**/lively4/**",
+      "lively4/**/.*/**",
       "**/bin/**"
     ]
   },
