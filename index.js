@@ -45,6 +45,7 @@ function getDirWithoutAsar(folder) {
   } else {
     directory = path.join(__dirname, folder);
   }
+  directory = directory.split('\\').join('/');
   if (directory.indexOf(':') !== -1) directory = `/${directory.substring(3)}`;
 
   return directory;
@@ -70,29 +71,16 @@ function startElectron() {
 }
 
 function getLivelyDir() {
-  // let livelyDir = path.join(__dirname, 'lively4/');
-  // writePathToFile(livelyDir, "livelyDir")
-
-  // let currDir = __dirname;
-  // writePathToFile(currDir, "currDir")
-
-  // // TODO refactor
-  // if (currDir.indexOf('app.asar') > -1) {
-  //   livelyDir = currDir.slice(0, -8) + 'lively4/';
-  // }
-  // // needed for windows path - replace 'C:\' with '/'
-  // if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
-
-  writePathToFile(getDirWithoutAsar('lively4/'), "livelyDir2");
-
+  writePathToFile(getDirWithoutAsar('lively4/'), "livelyDir");
   return getDirWithoutAsar('lively4/');
 }
 
 function getServerDir() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
-  if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
-  writePathToFile(serverDir, "serverDir")
+  serverDir = serverDir.split('\\').join('/');
+  if (serverDir.indexOf(':') !== -1) serverDir = `/c/${serverDir.substring(3)}`;
+  writePathToFile(serverDir, "serverDir");
 
   return serverDir;
 }
