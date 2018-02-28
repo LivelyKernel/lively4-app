@@ -75,7 +75,9 @@ function getServerDir() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
   serverDir = serverDir.split('\\').join('/');
-  if (serverDir.indexOf(':') !== -1) serverDir = `/c/${serverDir.substring(3)}`;
+  if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
+  if(getPlatform() === 'win') serverDir = `/c${serverDir}`;
+  serverDir = serverDir.replace('app.asar/', '');
   writePathToFile(serverDir, "serverDir");
 
   return serverDir;
