@@ -40,8 +40,6 @@ function writePathToFile(path, comment) {
 
 function getDirWithoutAsar(folder) {
   let directory;
-  writePathToFile(__dirname, "bla");
-  writePathToFile(__dirname.indexOf('app.asar'), "bla");
   if (__dirname.indexOf('app.asar') > -1) {
     directory = __dirname.slice(0, -8) + folder;
   } else {
