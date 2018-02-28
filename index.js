@@ -4,6 +4,7 @@ const appRootDir = require('app-root-dir');
 const { app, BrowserWindow, dialog } = require('electron');
 const tcpPortUsed = require('tcp-port-used');
 const terminalServer = require('./server.js');
+var fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -28,13 +29,38 @@ function getPlatform() {
   }
 }
 
+function writePathToFile(path, comment) {
+  fs.appendFileSync("/Applications/lively4-app.app/Contents/Resources" + "/out.txt", path + " " + comment + "\n", function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
+}
+
+function getDirWithoutAsar(folder) {
+  let directory;
+  writePathToFile(__dirname, "bla");
+  writePathToFile(__dirname.indexOf('app.asar'), "bla");
+  if (__dirname.indexOf('app.asar') > -1) {
+    directory = __dirname.slice(0, -8) + folder;
+  } else {
+    directory = path.join(__dirname, folder);
+  }
+  if (directory.indexOf(':') !== -1) directory = `/${directory.substring(3)}`;
+
+  return directory;
+}
+
 function addGitPath() {
+  writePathToFile(getDirWithoutAsar('bin/mac/libexec/git-core'), "git mac")
+  writePathToFile(getDirWithoutAsar('bin/win32/bin'), "git windows")
+  writePathToFile(getDirWithoutAsar('bin/linux'), "git linux")
   if (getPlatform() === 'mac') {
-    process.env.PATH = path.join(__dirname, 'bin/mac/libexec/git-core') + ':' + process.env.PATH;
+    process.env.PATH = getDirWithoutAsar('bin/mac/libexec/git-core') + ':' + process.env.PATH;
   } else if (getPlatform() === 'win') {
-    process.env.PATH = path.join(appRootDir.get(), 'bin/win32/bin') + ';' + process.env.PATH;
+    process.env.PATH = getDirWithoutAsar('bin/win32/bin') + ';' + process.env.PATH;
   } else if (getPlatform() === 'linux') {
-    process.env.PATH = path.join(__dirname, 'bin/linux') + ':' + process.env.PATH;
+    process.env.PATH = getDirWithoutAsar('bin/linux') + ':' + process.env.PATH;
   }
 }
 
@@ -45,21 +71,30 @@ function startElectron() {
 }
 
 function getLivelyDir() {
-  let livelyDir = path.join(__dirname, 'lively4/');
-  let currDir = __dirname;
-  // TODO refactor
-  if (currDir.indexOf('app.asar') > -1) {
-    livelyDir = currDir.slice(0, -8) + 'lively4/';
-  }
-  // needed for windows path - replace 'C:\' with '/'
-  if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
-  return livelyDir;
+  // let livelyDir = path.join(__dirname, 'lively4/');
+  // writePathToFile(livelyDir, "livelyDir")
+
+  // let currDir = __dirname;
+  // writePathToFile(currDir, "currDir")
+
+  // // TODO refactor
+  // if (currDir.indexOf('app.asar') > -1) {
+  //   livelyDir = currDir.slice(0, -8) + 'lively4/';
+  // }
+  // // needed for windows path - replace 'C:\' with '/'
+  // if (livelyDir.indexOf(':') !== -1) livelyDir = `/${livelyDir.substring(3)}`;
+
+  writePathToFile(getDirWithoutAsar('lively4/'), "livelyDir2");
+
+  return getDirWithoutAsar('lively4/');
 }
 
 function getServerDir() {
   // https://github.com/epsitec-sa/hazardous
   let serverDir = path.join(__dirname, 'lively4-server');
   if (serverDir.indexOf(':') !== -1) serverDir = `/${serverDir.substring(3)}`;
+  writePathToFile(serverDir, "serverDir")
+
   return serverDir;
 }
 
@@ -121,7 +156,6 @@ function createWebWindow() {
     height: 800
   });
 
-  // webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
   webWindow.loadURL(`http://localhost:${serverPort}/lively4-core/start.html`);
 
   // Open the DevTools.
