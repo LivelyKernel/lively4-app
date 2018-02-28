@@ -40,6 +40,7 @@ function getDirWithoutAsar(folder) {
   } else {
     directory = path.join(__dirname, folder);
   }
+  directory = directory.replace('app.asar/', '');
   directory = directory.split('\\').join('/');
   if (directory.indexOf(':') !== -1) directory = `/${directory.substring(3)}`;
 
