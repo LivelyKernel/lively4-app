@@ -15,8 +15,10 @@ Install node.js and run `./setup.sh`
 
 ### Scripts
 
+(`dist` and `pack` must be run as administrator under windows)
+
 - `npm start` - start an electron instance with the lively4-core embedded  
-- `npm run dist` - builds a package with additional installer  
+- `npm run dist` - builds a package with additional installer
 - `npm run pack` - builds the app for production  
 
 ### Dependencies
