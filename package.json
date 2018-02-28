@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "electron": "^1.7.11",
-    "electron-builder": "^19.45.4"
+    "electron-builder": "^19.56.2"
   },
   "dependencies": {
     "app-root-dir": "^1.0.2",

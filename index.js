@@ -31,11 +31,6 @@ function getPlatform() {
 
 function writePathToFile(path, comment) {
   console.log(path + " " + comment);
-  // fs.appendFileSync("~" + "/out.txt", path + " " + comment + "\n", function(err) {
-  //   if(err) {
-  //     return console.log(err);
-  //   }
-  // });
 }
 
 function getDirWithoutAsar(folder) {
