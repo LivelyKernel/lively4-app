@@ -30,11 +30,12 @@ function getPlatform() {
 }
 
 function writePathToFile(path, comment) {
-  fs.appendFileSync("/Applications/lively4-app.app/Contents/Resources" + "/out.txt", path + " " + comment + "\n", function(err) {
-    if(err) {
-      return console.log(err);
-    }
-  });
+  console.log(path + " " + comment);
+  // fs.appendFileSync("~" + "/out.txt", path + " " + comment + "\n", function(err) {
+  //   if(err) {
+  //     return console.log(err);
+  //   }
+  // });
 }
 
 function getDirWithoutAsar(folder) {
